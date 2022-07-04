@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var timeLeft = initialCountDownTimerInMilis
     private val TAG = MainActivity::class.java.simpleName
     private lateinit var animation: Animation
-
+    private lateinit var animationBlink: Animation
 
     companion object { //statische variabele
         private const val SCORE_KEY = "SCORE_KEY"
@@ -37,7 +40,10 @@ class MainActivity : AppCompatActivity() {
         timer = findViewById(R.id.timer)
         scoreView = findViewById(R.id.score)
         tapMeButton = findViewById(R.id.tapMe)
+
         animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+        animationBlink = AnimationUtils.loadAnimation(this, R.anim.blink)
+
         tapMeButton.setOnClickListener {
             tapMeButton.startAnimation(animation)
             incrementScore()
@@ -68,7 +74,11 @@ class MainActivity : AppCompatActivity() {
     private fun incrementScore() {
         score++
         var newScore = getString(R.string.score_view, score)
+
+
+
         scoreView.text = newScore
+        scoreView.startAnimation(animationBlink)
 
     }
 
@@ -115,6 +125,28 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        if(item.itemId == R.id.menu_about) {
+            showAbout()
+        }
+        return true
+    }
+
+    private fun showAbout() {
+        AlertDialog.Builder(this)
+            .setTitle("About")
+            .setMessage("Made by Yakke")
+            .create()
+            .show()
     }
 
 }
