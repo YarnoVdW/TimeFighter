@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private var gameStarted = false
     private var timeLeft = initialCountDownTimerInMilis
     private val TAG = MainActivity::class.java.simpleName
+    private lateinit var animation: Animation
+
 
     companion object { //statische variabele
         private const val SCORE_KEY = "SCORE_KEY"
@@ -33,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         timer = findViewById(R.id.timer)
         scoreView = findViewById(R.id.score)
         tapMeButton = findViewById(R.id.tapMe)
+        animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
         tapMeButton.setOnClickListener {
+            tapMeButton.startAnimation(animation)
             incrementScore()
             if (!gameStarted) {
                 startGame()
